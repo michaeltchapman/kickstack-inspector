@@ -24,8 +24,10 @@ res.each { |k, v|
     puts "==============="
     puts arg
     puts value
-    puts "compute node: " + hiera.lookup(value.arguments[0], value.arguments[1], compute_scope).to_s
-    puts "control node: " + hiera.lookup(value.arguments[0], value.arguments[1], control_scope).to_s
-    puts "build node: "   + hiera.lookup(value.arguments[0], value.arguments[1], build_scope).to_s
+    puts value.arguments[0].to_s
+    puts value.arguments[1]
+    puts "compute node: " + hiera.lookup(value.arguments[0].to_s.gsub('"', ''), value.arguments[1].to_s.gsub('"', ''), compute_scope).to_s
+    puts "control node: " + hiera.lookup(value.arguments[0].to_s.gsub('"', ''), value.arguments[1].to_s.gsub('"', ''), control_scope).to_s
+    puts "build node: "   + hiera.lookup(value.arguments[0].to_s.gsub('"', ''), value.arguments[1].to_s.gsub('"', ''), build_scope).to_s
   }
 }
