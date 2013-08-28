@@ -17,6 +17,8 @@ build_scope = {"role" => "openstack"}
 
 hiera = Hiera.new(:config => "/etc/puppet/hiera.yaml")
 
+mappings = {}
+
 res.each { |k, v|
   puts "#############"
   puts k.name
@@ -24,10 +26,24 @@ res.each { |k, v|
     puts "==============="
     puts arg
     puts value
-    puts value.arguments[0].to_s
-    puts value.arguments[1]
-    puts "compute node: " + hiera.lookup(value.arguments[0].to_s.gsub('"', ''), value.arguments[1].to_s.gsub('"', ''), compute_scope).to_s
-    puts "control node: " + hiera.lookup(value.arguments[0].to_s.gsub('"', ''), value.arguments[1].to_s.gsub('"', ''), control_scope).to_s
-    puts "build node: "   + hiera.lookup(value.arguments[0].to_s.gsub('"', ''), value.arguments[1].to_s.gsub('"', ''), build_scope).to_s
+    hiera_lkup  = value.arguments[0].to_s.gsub('"', '')
+    hiera_default = value.arguments[1].to_s.gsub('"', '')
+    puts "compute node: " + hiera.lookup(hiera_lkup, hiera_default, compute_scope).to_s
+    puts "control node: " + hiera.lookup(hiera_lkup, hiera_default, control_scope).to_s
+    puts "build node: "   + hiera.lookup(hiera_lkup, hiera_default, build_scope).to_s
+
+    if !mappings.has_key?(hiera_lkup) then
+      mappings[hiera_lkup] = [k.name]
+    else 
+      mappings[hiera_lkup].push(k.name)
+    end
   }
+}
+
+mappings.each { |k, v|
+  puts "Hiera data: " + k
+  v.each { |c|
+    puts c
+  }
+  puts ""
 }
