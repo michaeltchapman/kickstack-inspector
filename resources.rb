@@ -41,9 +41,11 @@ res.each { |k, v|
 }
 
 mappings.each { |k, v|
-  puts "Hiera data: " + k
-  v.each { |c|
-    puts c
-  }
-  puts ""
+  if v.length != 1 then
+    puts "Hiera data: " + k
+    v.each { |c|
+      puts c
+    }
+    puts ""
+  end
 }
